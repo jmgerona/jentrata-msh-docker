@@ -40,4 +40,9 @@ echo waiting for postgres
 echo waiting for activemq
 /opt/wait-for-it.sh "$ACTIVEMQ_HOST_NAME:61616"
 
-exec catalina.sh run
+CMD="run"
+if test "$JENTRATA_DEBUG" = "true"; then
+  CMD="jpda run"
+fi
+echo "running jentrata in $CMD mode"
+exec catalina.sh $CMD
