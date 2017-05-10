@@ -1,0 +1,29 @@
+version: '2.1'
+services:
+  postgres:
+    image: postgres:9.5
+    environment:
+      POSTGRES_USER: jentrata
+      POSTGRES_PASSWORD: jentrata
+      POSTGRES_DB: jentrata
+      DB_USER_NAME: corvus
+      DB_USER_PASS: corvus
+    volumes:
+    - ./Dist/src/main/scripts/sql/as2.sql:/work/sql/as2.sql
+    - ./Dist/src/main/scripts/sql/ebms.sql:/work/sql/ebms.sql
+    - ./ContainerFiles/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+  jentrata:
+    build: .
+    env_file: .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - activemq
+    links:
+      - postgres:db
+      - activemq:activemq
+  activemq:
+    image: webcenter/activemq
+    ports:
+      - "8161:8161"
