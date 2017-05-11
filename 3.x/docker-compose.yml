@@ -4,9 +4,9 @@ services:
     image: postgres:9.5
     env_file: .env
     volumes:
-    - ./Dist/src/main/scripts/sql/as2.sql:/work/sql/as2.sql
-    - ./Dist/src/main/scripts/sql/ebms.sql:/work/sql/ebms.sql
-    - ./ContainerFiles/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+    - ./db/as2.sql:/work/sql/as2.sql
+    - ./db/ebms.sql:/work/sql/ebms.sql
+    - ./db/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
   jentrata:
     build: .
     env_file: .env
