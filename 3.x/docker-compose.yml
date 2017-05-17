@@ -4,12 +4,15 @@ services:
     image: postgres:9.5
     env_file: .env
     volumes:
-    - ./db/as2.sql:/work/sql/as2.sql
-    - ./db/ebms.sql:/work/sql/ebms.sql
-    - ./db/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+      - ./db/as2.sql:/work/sql/as2.sql
+      - ./db/ebms.sql:/work/sql/ebms.sql
+      - ./db/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
   jentrata:
     build: .
     env_file: .env
+    restart: always
+    volumes:
+      - ./conf:/usr/local/tomcat/conf
     ports:
       - "8080:8080"
     depends_on:
@@ -19,6 +22,13 @@ services:
       - postgres:db
       - activemq:activemq
   activemq:
-    image: webcenter/activemq
+    image: webcenter/activemq:5.14.3
     ports:
       - "8161:8161"
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 192.168.201.0/24
